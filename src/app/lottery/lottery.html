@@ -1,0 +1,32 @@
+<div class="lottery-container">
+  <h2>Lottery Dashboard</h2>
+
+  <div class="status-section">
+    <p><strong>Status:</strong> {{ lotteryStatus }}</p>
+    <p *ngIf="winnerName"><strong>Current Winner:</strong> {{ winnerName }}</p>
+  </div>
+
+  <div class="my-result-section" *ngIf="myResult">
+    <h3>Your Result:</h3>
+    <p class="result-message" [class.win]="myResult === 'You win!'" [class.lose]="myResult === 'Sorry, you lose.'">
+      {{ myResult }}
+    </p>
+  </div>
+
+  <button (click)="runLottery()" [disabled]="isLotteryRunning">{{ isLotteryRunning ? 'Drawing...' : 'Run Lottery' }}</button>
+
+  <h3>Registered Participants (for reference):</h3>
+  <ul class="participant-list">
+    <li *ngFor="let participant of (participants$ | async)">
+      {{ participant.deviceName }} - {{ participant.registeredAt | date:'short' }}
+      <span *ngIf="participant.winner" class="winner-tag">(WINNER)</span>
+      <span *ngIf="participant.deviceName === myDeviceId" class="my-device-tag">(This is my device)</span>
+    </li>
+  </ul>
+
+  <div class="identify-section">
+    <h4>Identify this device (for result tracking):</h4>
+    <input type="text" [(ngModel)]="myDeviceId" placeholder="Enter your device name here">
+    <button (click)="identifyDevice(myDeviceId)">Set My Device</button>
+  </div>
+</div>
